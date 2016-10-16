@@ -26,7 +26,7 @@ Tick parseLine(std::string &line) {
   auto id = words[2];
 
   if (type.compare("A") == 0 && words.size() == 6) { // ADD
-    bool buy = words[3].compare("B") == 0;
+    TransactionType transactiontype = words[3].compare("B") == 0 ? TransactionType::BUY : TransactionType::SELL;
 
     long price = convertToCents(words[4]);
     if (price == -1)
@@ -35,7 +35,7 @@ Tick parseLine(std::string &line) {
     long size;
     if (!parse(words[5].begin(), words[5].end(), long_, size))
       return Tick::errorTick();
-    return Tick(timestamp, id, buy, price, size);
+    return Tick(timestamp, id, transactiontype, price, size);
   } else if (type.compare("R") == 0 && words.size() == 4) { // REDUCE
     long size;
     if (!parse(words[3].begin(), words[3].end(), long_, size))

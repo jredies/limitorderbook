@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 
-#define DEBUG false
+#define DEBUG true
 
 std::chrono::time_point<std::chrono::system_clock> start, stop;
 
@@ -51,7 +51,7 @@ void simulate(std::list<Tick> &ticks, uint target_size) {
 
   for (auto &t : ticks) {
     if (t.isAddTick()) {
-      if (t.buy)
+      if (t.transactiontype == TransactionType::BUY)
         bid.add(t);
       else
         ask.add(t);
