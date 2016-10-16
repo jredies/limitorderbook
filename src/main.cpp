@@ -16,7 +16,7 @@ std::chrono::time_point<std::chrono::system_clock> start, stop;
 void startStopWatch();
 void stopStopWatch(std::string description);
 
-void simulate(std::list<Tick> &ticks, long target_size);
+void simulate(std::list<Tick> &ticks, uint target_size);
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     std::cerr << "Syntax: ./pricer target-size" << std::endl;
     exit(1);
   }
-  auto target_size = boost::lexical_cast<long>(argv[1]);
+  auto target_size = boost::lexical_cast<uint>(argv[1]);
 
   std::list<std::string> lines;
   std::string s;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void simulate(std::list<Tick> &ticks, long target_size) {
+void simulate(std::list<Tick> &ticks, uint target_size) {
   Book bid(target_size, std::greater<long>{});
   Book ask(target_size, std::less<long>{});
 
