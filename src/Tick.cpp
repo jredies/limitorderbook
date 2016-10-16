@@ -12,3 +12,26 @@ std::string toDollarString(const long price) {
   ss << std::fixed << std::setprecision(2) << d;
   return ss.str();
 }
+
+std::string reduce_toString(const Tick& t) {
+  return std::to_string(t.timestamp) + " R " + t.id + " " +
+         std::to_string(t.size);
+}
+
+std::string add_toString(const Tick& t) {
+  auto ret = std::to_string(t.timestamp) + " A " + t.id + " ";
+  if (t.transactiontype == TransactionType::BUY)
+    ret += "B";
+  else
+    ret += "S";
+  ret += " " + toDollarString(t.price);
+  ret += " " + std::to_string(t.size);
+  return ret;
+}
+
+std::string Tick::toString() const {
+  if (isAddTick())
+    return add_toString(*this);
+  else
+    return reduce_toString(*this);
+}

@@ -36,6 +36,8 @@ int main(int argc, char *argv[]) {
 
   startStopWatch();
   auto ticks = parseLines(lines);
+  for (auto &t: ticks)
+    t.toString();
   stopStopWatch("Parsing");
 
   startStopWatch();
