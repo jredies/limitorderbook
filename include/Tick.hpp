@@ -1,31 +1,35 @@
 #ifndef SRC_TICK_H_
 #define SRC_TICK_H_
 
-#include <string>
-#include <sstream>
-#include <iomanip>
 #include <boost/numeric/conversion/cast.hpp>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
-enum class TransactionType {BUY, SELL};
-
+enum class TransactionType { BUY, SELL };
+enum class TickType { ADD, REDUCE, ERROR };
 struct Tick {
-  const long timestamp;
-  const bool add;
+  const uint timestamp;
   const std::string id;
   const TransactionType transactiontype;
-  const long price; // Price in USD Cents
-  const long size;
+  const uint price; // Price in USD Cents
+  const uint size;
+  const TickType type;
 
   // AddTick
-  Tick(const long timestamp, const std::string &id, const TransactionType transactiontype,
-       const long price, const long size)
-      : timestamp(timestamp), add(true), id(id), transactiontype(transactiontype), price(price),
-        size(size) {}
+  Tick(const uint timestamp, const std::string &id,
+       const TransactionType transactiontype, const uint price, const uint size)
+      : timestamp(timestamp), id(id), transactiontype(transactiontype),
+        price(price), size(size), type(TickType::ADD) {}
 
   // ReduceTick
-  Tick(const long timestamp, const std::string &id, const long size)
-      : timestamp(timestamp), add(false), id(id), transactiontype(TransactionType::SELL), price(-1),
-        size(size) {}
+  Tick(const uint timestamp, const std::string &id, const uint size)
+      : timestamp(timestamp), id(id), transactiontype(TransactionType::SELL),
+        price(-1), size(size), type(TickType::REDUCE) {}
+
+  Tick()
+      : timestamp(0), id(""), transactiontype(TransactionType::SELL), price(0),
+        size(0), type(TickType::ERROR) {}
 
   bool isAddTick() const;
 
@@ -36,9 +40,9 @@ struct Tick {
   std::string toString() const;
 
   // ErrorTick - invalid Syntax
-  static Tick errorTick() { return Tick(0, " ", TransactionType::SELL, -2, 0); }
+  static Tick errorTick() { return Tick(); }
 };
 
-std::string toDollarString(const long price);
+std::string toDollarString(const uint price);
 
 #endif /* SRC_TICK_H_ */

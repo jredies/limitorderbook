@@ -26,18 +26,23 @@ int main(int argc, char *argv[]) {
   }
   auto target_size = boost::lexical_cast<uint>(argv[1]);
 
-  std::list<std::string> lines;
+  std::ios::sync_with_stdio(false);
+
+  std::vector<std::string> lines;
   std::string s;
 
   startStopWatch();
-  while (std::getline(std::cin, s))
-    lines.push_back(s);
+  #define MAX_LINE 120
+  char input_line[MAX_LINE];
+  char *result;
+
+  while((result = fgets(input_line, MAX_LINE, stdin )) != NULL)
+    lines.push_back(std::string(result));
+
   stopStopWatch("Read");
 
   startStopWatch();
   auto ticks = parseLines(lines);
-  for (auto &t: ticks)
-    t.toString();
   stopStopWatch("Parsing");
 
   startStopWatch();
@@ -48,8 +53,8 @@ int main(int argc, char *argv[]) {
 }
 
 void simulate(std::list<Tick> &ticks, uint target_size) {
-  Book bid(target_size, std::greater<long>{});
-  Book ask(target_size, std::less<long>{});
+  Book bid(target_size, std::greater<uint>{});
+  Book ask(target_size, std::less<uint>{});
 
   for (auto &t : ticks) {
     if (t.isAddTick()) {

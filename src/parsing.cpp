@@ -48,16 +48,15 @@ Tick parseLine(std::string &line) {
   }
 
   if (count == 6) {
-    add(tokens);
+    return add(tokens);
   }
   if (count == 4) {
-    reduce(tokens);
+    return reduce(tokens);
   }
-
   return Tick::errorTick();
 }
 
-std::list<Tick> parseLines(std::list<std::string> &lines) {
+std::list<Tick> parseLines(std::vector<std::string> &lines) {
   std::list<Tick> ret;
   for (auto &l : lines) {
     ret.push_back(parseLine(l));

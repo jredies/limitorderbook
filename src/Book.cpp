@@ -1,19 +1,19 @@
 #include "Book.hpp"
 
-long Book::bestPrice() {
-  long left = amount;
-  long best_price = 0;
+uint Book::bestPrice() {
+  uint left = amount;
+  uint best_price = 0;
 
   for (auto &l : levels) {
-    long volume = l.second.volume;
-    long lot_price = l.first;
+    uint volume = l.second.volume;
+    uint lot_price = l.first;
     if (left - volume == 0) {
       best_price += lot_price * volume;
       return best_price;
     } else if (left - volume > 0) {
       best_price += lot_price * volume;
       left -= volume;
-    } else if ((left - volume) < 0) {
+    } else if (((int)left - (int)volume) < 0) {
       best_price += lot_price * left;
       return best_price;
     }
@@ -41,7 +41,7 @@ void Book::add(Tick &t) {
 bool Book::reduce(Tick &t) {
   last_timestamp = t.timestamp;
 
-  long price;
+  uint price;
   auto it_price = id_price.find(t.id);
   if (it_price == id_price.end())
     return false;
@@ -56,7 +56,7 @@ bool Book::reduce(Tick &t) {
     auto it_order = level.orders.find(t.id);
 
     if (it_order != level.orders.end()) {
-      long diff = it_order->second - t.size;
+      uint diff = it_order->second - t.size;
       if (diff > 0) {
         it_order->second -= t.size;
         level.volume -= t.size;
@@ -84,7 +84,7 @@ bool Book::reduce(Tick &t) {
 }
 
 opt_ts_price Book::update_log() {
-  long new_best_price = bestPrice();
+  uint new_best_price = bestPrice();
   if (best_price != new_best_price) {
     std::string ts_string = std::to_string(last_timestamp);
     std::string new_best_price_string;

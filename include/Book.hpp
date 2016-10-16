@@ -16,14 +16,14 @@
 typedef boost::optional<std::pair<std::string, std::string>> opt_ts_price;
 
 struct Compare {
-  bool operator()(const long l, const long r) const { return cmp(l, r); }
-  std::function<bool(const long, const long)> cmp;
+  bool operator()(const uint l, const uint r) const { return cmp(l, r); }
+  std::function<bool(const uint, const uint)> cmp;
 };
 
 class PriceLevel {
   // id -> size
-  std::unordered_map<std::string, long> orders;
-  long volume;
+  std::unordered_map<std::string, uint> orders;
+  uint volume;
   friend class Book;
 public:
   PriceLevel() : volume(0), orders() {}
@@ -31,18 +31,18 @@ public:
 
 class Book {
   // price -> (id -> size)
-  std::map<long, PriceLevel, Compare> levels;
+  std::map<uint, PriceLevel, Compare> levels;
 
   // id -> price
-  std::unordered_map<std::string, long> id_price;
+  std::unordered_map<std::string, uint> id_price;
 
-  const long amount;
-  long last_timestamp;
-  long best_price;
+  const uint amount;
+  uint last_timestamp;
+  uint best_price;
 
 public:
   template <typename T>
-  Book(const long amount, T comparator)
+  Book(const uint amount, T comparator)
       : amount(amount), levels(Compare{comparator}), id_price(),
         last_timestamp(-1), best_price(-1) {}
 
@@ -50,7 +50,7 @@ public:
 
   bool reduce(Tick &t);
 
-  long bestPrice();
+  uint bestPrice();
 
   opt_ts_price update_log();
 };
