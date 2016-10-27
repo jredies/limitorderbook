@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 
-#define DEBUG true
+#define DEBUG false
 
 std::chrono::time_point<std::chrono::system_clock> start, stop;
 
@@ -57,8 +57,6 @@ void simulate(std::list<Tick> &ticks, int target_size) {
   Book ask(target_size, std::less<int>{});
 
   for (auto &t : ticks) {
-    std::cout << t.toString() << std::endl;
-
     if (t.isAddTick()) {
       if (t.transactiontype == TransactionType::BUY) {
         bid.add(t);
@@ -79,14 +77,12 @@ void simulate(std::list<Tick> &ticks, int target_size) {
     }
 
     if (auto ts_price = ask.update_log()) {
-      std::cout << "ask update" << std::endl;
       if (!DEBUG) {
         std::cout << ts_price->first << " B " << ts_price->second << std::endl;
       }
     }
 
     if (auto ts_price = bid.update_log()) {
-      std::cout << "bid update" << std::endl;
       if (!DEBUG) {
         std::cout << ts_price->first << " S " << ts_price->second << std::endl;
       }

@@ -1,3 +1,5 @@
 logs/
 CMake*
 pricer
+CMakeFiles/
+Makefile
