@@ -30,6 +30,7 @@ public:
 };
 
 class Book {
+public:
   // price -> (id -> size)
   std::map<uint, PriceLevel, Compare> levels;
 
@@ -40,7 +41,6 @@ class Book {
   uint last_timestamp;
   uint best_price;
 
-public:
   template <typename T>
   Book(const uint amount, T comparator)
       : amount(amount), levels(Compare{comparator}), id_price(),

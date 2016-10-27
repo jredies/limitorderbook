@@ -32,11 +32,11 @@ int main(int argc, char *argv[]) {
   std::string s;
 
   startStopWatch();
-  #define MAX_LINE 120
+#define MAX_LINE 120
   char input_line[MAX_LINE];
   char *result;
 
-  while((result = fgets(input_line, MAX_LINE, stdin )) != NULL)
+  while ((result = fgets(input_line, MAX_LINE, stdin)) != NULL)
     lines.push_back(std::string(result));
 
   stopStopWatch("Read");
@@ -57,28 +57,39 @@ void simulate(std::list<Tick> &ticks, uint target_size) {
   Book ask(target_size, std::less<uint>{});
 
   for (auto &t : ticks) {
+    std::cout << t.toString() << std::endl;
+
     if (t.isAddTick()) {
-      if (t.transactiontype == TransactionType::BUY)
+      if (t.transactiontype == TransactionType::BUY) {
         bid.add(t);
-      else
+      }
+      if (t.transactiontype == TransactionType::SELL) {
         ask.add(t);
+      }
     } else if (t.isReduceTick()) {
       bool ask_reduced = ask.reduce(t);
       bool bid_reduced = bid.reduce(t);
-      if (ask_reduced && bid_reduced)
+      if (ask_reduced && bid_reduced) {
         std::cerr << "Warning: Should not be in both books!" << std::endl;
-      else if (!ask_reduced & !bid_reduced)
+      } else if (!ask_reduced & !bid_reduced) {
         std::cerr << "Warning: Should be in one of the books!" << std::endl;
-    } else if (!t.isErrorTick()) {
+      }
+    } else if (t.isErrorTick()) {
       std::cerr << "Warning: Invald line!" << std::endl;
     }
+
     if (auto ts_price = ask.update_log()) {
-      if (!DEBUG)
+      std::cout << "ask update" << std::endl;
+      if (!DEBUG) {
         std::cout << ts_price->first << " B " << ts_price->second << std::endl;
+      }
     }
+
     if (auto ts_price = bid.update_log()) {
-      if (!DEBUG)
+      std::cout << "bid update" << std::endl;
+      if (!DEBUG) {
         std::cout << ts_price->first << " S " << ts_price->second << std::endl;
+      }
     }
   }
 }
