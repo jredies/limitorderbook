@@ -19,7 +19,7 @@
 
 std::list<Tick> parseLines(std::vector<std::string> &lines);
 
-std::string to_dollar_string(const uint price);
+std::string to_dollar_string(const int price);
 
 // Gets rid of annyoing warning.
 // Know issue reported at svn.boost.org/trac/boost/ticket/11886
@@ -30,7 +30,7 @@ std::string to_dollar_string(const uint price);
 #include <boost/spirit/include/qi.hpp>
 
 using boost::spirit::qi::double_;
-using boost::spirit::qi::uint_;
+using boost::spirit::qi::int_;
 using boost::spirit::qi::parse;
 
 #endif /* SRC_PARSING_H_ */

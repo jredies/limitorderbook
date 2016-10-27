@@ -6,7 +6,7 @@ bool Tick::isReduceTick() const { return type == TickType::REDUCE; }
 
 bool Tick::isErrorTick() const { return type == TickType::ERROR; }
 
-std::string toDollarString(const uint price) {
+std::string toDollarString(const int price) {
   std::stringstream ss;
   double d = boost::numeric_cast<double>(price) / 100.0;
   ss << std::fixed << std::setprecision(2) << d;
